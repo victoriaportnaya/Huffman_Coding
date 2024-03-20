@@ -82,7 +82,7 @@ public class Huffman // huffman encoding
         AssignCode(node.Right, code + "1", binaryCodes); // if right node - add 1
     }
 
-    public static Tuple<string, Dictionary<char, string> Encode(string inputText)
+    public static Tuple<string, Dictionary<char, string> Encode(string inputText) // encoder
     {
         Node root = BuildTree(inputText);
         Dictionary<char, string> binaryCodes = new Dictionary<char, string>();
@@ -91,4 +91,28 @@ public class Huffman // huffman encoding
         string encodedString = string.Join("", inputText.Select(c => binaryCodes[c]));
         return Tuple.Create(encodedString, binaryCodes);
     }
+    
+    // decoder add
+    public static string Decode(string encodedString, Dictionary<char, string> binaryCodes)
+    {
+        var reversedCodes = binaryCodes.ToDictionary(x => x.Value, x => x.Key);
+        var currentCode = "";
+        var decodedString = "";
+
+        foreach (var bit in encodedString)
+        {
+            currentCode += bit;
+            if (reversedCodes.ContainsKey(currentCode))
+            {
+                decodedString += reversedCodes[currentCode];
+                currentCode = "";
+            }
+            
+        }
+
+        return decodedString;
+    }
+    
+    
+    
 }
