@@ -46,5 +46,8 @@ public class Huffman // huffman encoding
                 freq[character] = 1;
             }
         }
+
+        List<Node> priorityQueue = freq.Select(entry => new Node { Char = entry.Key, Freq = entry.Value }).ToList(); // create priority queue
+        priorityQueue.Sort();
     }
 }
