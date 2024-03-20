@@ -29,3 +29,22 @@ public class Node : IComparable<Node>
         return Freq.CompareTo(other.Freq);
     }
 }
+
+public class Huffman // huffman encoding
+{
+    public static Node BuildTree(string inputText) // build huffman tree 
+    {
+        Dictionary<char, int> freq = new Dictionary<char, int>(); // dict for char-freq
+        foreach (char character in inputText) // calculate frequence -- better to replace with LINQ
+        {
+            if (freq.ContainsKey(character))
+            {
+                freq[character] += 1;
+            }
+            else
+            {
+                freq[character] = 1;
+            }
+        }
+    }
+}
