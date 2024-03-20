@@ -12,3 +12,4 @@ C:\Users\victo\RiderProjects\ConsoleApp23\ConsoleApp23\obj\Debug\net8.0\refint\C
 C:\Users\victo\RiderProjects\ConsoleApp23\ConsoleApp23\obj\Debug\net8.0\ConsoleApp23.pdb
 C:\Users\victo\RiderProjects\ConsoleApp23\ConsoleApp23\obj\Debug\net8.0\ConsoleApp23.genruntimeconfig.cache
 C:\Users\victo\RiderProjects\ConsoleApp23\ConsoleApp23\obj\Debug\net8.0\ref\ConsoleApp23.dll
+C:\Users\victo\RiderProjects\ConsoleApp23\ConsoleApp23\obj\Debug\net8.0\ConsoleApp23.sourcelink.json

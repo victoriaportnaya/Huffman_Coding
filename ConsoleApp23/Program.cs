@@ -1,20 +1,10 @@
-﻿\
+﻿using Path = System.IO.Path;\
 // read text file 
 // ceeate dict
 // add frequency of the words to dict 
 
 using System.Net.Mime;
-// create dict 
-class Program
-{
-    static void Main()
-    {
-        string myText = File.ReadAllText("textFile.txt");
-        Dictionary<char, int> charFrequency = myText
-            .GroupBy(c => c)
-            .ToDictionary(g => g.Key, g => g.Count());
-    }
-}
+using System.Security.Cryptography;
 
 // general version of the huffman coding
 public class Node : IComparable<Node>
@@ -82,7 +72,7 @@ public class Huffman // huffman encoding
         AssignCode(node.Right, code + "1", binaryCodes); // if right node - add 1
     }
 
-    public static Tuple<string, Dictionary<char, string> Encode(string inputText) // encoder
+    public static Tuple<string, Dictionary<char, string>Encode(string inputText) 
     {
         Node root = BuildTree(inputText);
         Dictionary<char, string> binaryCodes = new Dictionary<char, string>();
@@ -112,7 +102,16 @@ public class Huffman // huffman encoding
 
         return decodedString;
     }
-    
-    
+
+
+    public static void Main()
+    {
+        string myText = File.ReadAllText("textFile.txt");
+        var result = Encode(myText);
+        var encodedText = result.Item1;
+        var binaryCodes = result.Item2;
+        var decodedData = Decode(encodedText, binaryCodes);
+        Console.WriteLine($"Encoded text: {encodedText}");
+    }
     
 }
