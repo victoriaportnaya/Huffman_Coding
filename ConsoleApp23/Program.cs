@@ -81,4 +81,14 @@ public class Huffman // huffman encoding
         AssignCode(node.Left, code + "0", binaryCodes); // if left node - add 0
         AssignCode(node.Right, code + "1", binaryCodes); // if right node - add 1
     }
+
+    public static Tuple<string, Dictionary<char, string> Encode(string inputText)
+    {
+        Node root = BuildTree(inputText);
+        Dictionary<char, string> binaryCodes = new Dictionary<char, string>();
+        AssignCode(root, "", binaryCodes);
+
+        string encodedString = string.Join("", inputText.Select(c => binaryCodes[c]));
+        return Tuple.Create(encodedString, binaryCodes);
+    }
 }
