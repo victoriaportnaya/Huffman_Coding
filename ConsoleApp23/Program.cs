@@ -1,10 +1,13 @@
-﻿using Path = System.IO.Path;\
+﻿using Path = System.IO.Path;
 // read text file 
 // ceeate dict
 // add frequency of the words to dict 
 
-using System.Net.Mime;
-using System.Security.Cryptography;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+
 
 // general version of the huffman coding
 public class Node : IComparable<Node>
@@ -72,14 +75,14 @@ public class Huffman // huffman encoding
         AssignCode(node.Right, code + "1", binaryCodes); // if right node - add 1
     }
 
-    public static Tuple<string, Dictionary<char, string>Encode(string inputText) 
+    public static Tuple<string, Dictionary<char, string>> Encode(string inputText) 
     {
         Node root = BuildTree(inputText);
         Dictionary<char, string> binaryCodes = new Dictionary<char, string>();
         AssignCode(root, "", binaryCodes);
 
         string encodedString = string.Join("", inputText.Select(c => binaryCodes[c]));
-        return Tuple.Create(encodedString, binaryCodes);
+        return new Tuple<string, Dictionary<char, string>>(encodedString, binaryCodes);
     }
     
     // decoder add
@@ -103,15 +106,36 @@ public class Huffman // huffman encoding
         return decodedString;
     }
 
-
+    public static void SaveTable(Dictionary<char, string> binaryCodes, string filePath)
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
+        {
+            foreach (var code in binaryCodes)
+            {
+                writer.Write(code.Key);
+                writer.Write(code.Value.Length);
+                writer.Write(code.Value);
+            }
+        }
+    }
+    
     public static void Main()
     {
-        string myText = File.ReadAllText("textFile.txt");
+        string myText = File.ReadAllText("C:\\Users\\victo\\RiderProjects\\ConsoleApp23\\ConsoleApp23\\textFile.txt");
         var result = Encode(myText);
         var encodedText = result.Item1;
         var binaryCodes = result.Item2;
         var decodedData = Decode(encodedText, binaryCodes);
         Console.WriteLine($"Encoded text: {encodedText}");
+        Console.WriteLine("Huffman Code Table");
+        foreach (var code in binaryCodes)
+        {
+            Console.WriteLine($"{code.Key} : {code.Value}");
+        }
+
+        string filePath = "C:\\Users\\victo\\RiderProjects\\ConsoleApp23\\ConsoleApp23\\encoded.txt";
+        SaveTable(binaryCodes, filePath);
+        
     }
     
 }
