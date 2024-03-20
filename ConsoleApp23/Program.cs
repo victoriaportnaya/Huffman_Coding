@@ -1,4 +1,5 @@
-﻿// read text file 
+﻿\
+// read text file 
 // ceeate dict
 // add frequency of the words to dict 
 
@@ -16,3 +17,15 @@ class Program
 }
 
 // general version of the huffman coding
+public class Node : IComparable<Node>
+{   
+    public char Char { get; set; } // node constructor
+    public int Freq { get; set; }
+    public Node Left { get; set; }
+    public Node Right { get; set; }
+
+    public int CompareTo(Node other) // compare frequencies of two nodes
+    {
+        return Freq.CompareTo(other.Freq);
+    }
+}
