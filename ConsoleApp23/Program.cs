@@ -49,5 +49,23 @@ public class Huffman // huffman encoding
 
         List<Node> priorityQueue = freq.Select(entry => new Node { Char = entry.Key, Freq = entry.Value }).ToList(); // create priority queue
         priorityQueue.Sort();
+        
+        // heap process 
+        while (priorityQueue.Count > 1)
+        {
+            Node left = priorityQueue[0];
+            priorityQueue.RemoveAt(0);
+            Node right = priorityQueue[0];
+            priorityQueue.RemoveAt(0);
+
+            Node merged = new Node { Char = '\0', Freq = left.Freq + right.Freq };
+            merged.Left = left;
+            merged.Right = right;
+
+            priorityQueue.Add(merged);
+            priorityQueue.Sort();
+        }
+
+        return priorityQueue[0]; // get min
     }
 }
