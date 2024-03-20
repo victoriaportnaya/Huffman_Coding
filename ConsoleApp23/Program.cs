@@ -68,4 +68,17 @@ public class Huffman // huffman encoding
 
         return priorityQueue[0]; // get min
     }
+
+    public static void AssignCode(Node node, string code, Dictionary<char, string> binaryCodes)
+    {
+        if (node == null) return;
+        if (node.Char != '\0')
+        {
+            binaryCodes[node.Char] = code;
+            return;
+        }
+
+        AssignCode(node.Left, code + "0", binaryCodes); // if left node - add 0
+        AssignCode(node.Right, code + "1", binaryCodes); // if right node - add 1
+    }
 }
