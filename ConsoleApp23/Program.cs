@@ -14,3 +14,5 @@ class Program
             .ToDictionary(g => g.Key, g => g.Count());
     }
 }
+
+// general version of the huffman coding
