@@ -9,6 +9,102 @@ using System.Collections.Generic;
 using System.Linq;
 
 
+// min heap for huffman code
+public class MinHeap
+{
+    private Node[] elements;
+    private int size;
+
+    public MinHeap(int maxSize)
+    {
+        elements = new Node[maxSize];
+    }
+    private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;
+    private int GetRightChildIndex(int elementIndex) => 2 * elementIndex + 2;
+    private int GetParentIndex(int elementIndex) => (elementIndex - 1) / 2;
+
+    private bool HasLeftChild(int elementIndex) => GetLeftChildIndex(elementIndex) < size;
+    private bool HasRightChild(int elementIndex) => GetRightChildIndex(elementIndex) < size;
+    private bool IsRoot(int elementIndex) => elementIndex == 0;
+
+    public int GetSize()
+    {
+        return size;
+    }
+
+    public bool IsEmpty() => size == 0;
+    
+    // methods
+    public Node Peek()
+    {
+        if (size == 0)
+        {
+            throw new Exception("Nothing to peek!");
+
+        }
+
+        return elements[0];
+    }
+
+    public Node Pop()
+    {
+        if (size == 0)
+        {
+            throw new Exception("Nothing to pop!");
+
+        }
+
+        var root = elements[0];
+        elements[0] = elements[--size];
+        HeapifyDown();
+        return root;
+    }
+
+    public void Add(Node element)
+    {
+        if (size == elements.Length)
+            throw new Exception("Exceeded number of cells!");
+        elements[size] = element;
+        HeapifyUp(size++);
+
+
+    }
+    private void HeapifyDown() // when pop 
+    {
+        int index = 0;
+        while (HasLeftChild(index))
+        {
+            var smallerChildIndex = GetLeftChildIndex(index);
+            if (HasRightChild(index) && elements[GetRightChildIndex(index)].Freq < elements[smallerChildIndex].Freq)
+            {
+                smallerChildIndex = GetRightChildIndex(index);
+            }
+
+            if (elements[index].Freq <= elements[smallerChildIndex].Freq)
+            {
+                break; 
+            }
+            Swap(index, smallerChildIndex);
+            index = smallerChildIndex;
+        }
+    }
+
+    private void HeapifyUp(int index) // when add
+    {
+        while (!IsRoot(index) && elements[index].Freq < elements[GetParentIndex(index)].Freq)
+        {
+            Swap(index, GetParentIndex(index));
+            index = GetParentIndex(index);
+        }
+    }
+
+    private void Swap(int firstIndex, int secondIndex)
+    {
+        (elements[firstIndex], elements[secondIndex]) = (elements[secondIndex], elements[firstIndex]);
+    }
+}
+
+
 // general version of the huffman coding
 public class Node : IComparable<Node>
 {   
@@ -40,26 +136,30 @@ public class Huffman // huffman encoding
             }
         }
 
-        List<Node> priorityQueue = freq.Select(entry => new Node { Char = entry.Key, Freq = entry.Value }).ToList(); // create priority queue
-        priorityQueue.Sort();
-        
-        // heap process 
-        while (priorityQueue.Count > 1)
+        MinHeap priorityQueue = new MinHeap(freq.Count);
+
+        foreach (var entry in freq) // fill in the tree with freqs
         {
-            Node left = priorityQueue[0];
-            priorityQueue.RemoveAt(0);
-            Node right = priorityQueue[0];
-            priorityQueue.RemoveAt(0);
+            Node node = new Node { Char = entry.Key, Freq = entry.Value };
+            priorityQueue.Add(node); 
+            
+        }
+        
+        // build tree until only root 
+        while (priorityQueue.GetSize() > 1)
+        {
+            Node left = priorityQueue.Pop();
+            Node right = priorityQueue.Pop();
 
             Node merged = new Node { Char = '\0', Freq = left.Freq + right.Freq };
             merged.Left = left;
             merged.Right = right;
 
             priorityQueue.Add(merged);
-            priorityQueue.Sort();
+            
         }
 
-        return priorityQueue[0]; // get min
+        return priorityQueue.Pop(); // get min
     }
 
     public static void AssignCode(Node node, string code, Dictionary<char, string> binaryCodes)
